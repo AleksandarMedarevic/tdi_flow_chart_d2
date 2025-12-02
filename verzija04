@@ -1,0 +1,91 @@
+direction: down
+
+// =============================
+//  LOCAL TREATMENT CENTRE LEVEL
+// =============================
+TC: {
+  direction: down
+  label: "Local Treatment Centre Level"
+
+  Client: "Client's first contact in the calendar year"
+  Professional: "Professional collects standardised data"
+  Method: "Data entry method"
+  HIS: "Local HIS exports TDI dataset"
+  Manual: "Manual entry via secure online TDI form"
+  LocalFile: "Local file prepared for upload"
+  FeedbackCentre: "Feedback report to treatment centre"
+}
+
+// =============================
+//      NATIONAL REGISTRY LEVEL
+// =============================
+NR: {
+  direction: down
+  label: "National Registry Level"
+
+  Transfer: "Secure transfer to National Data Warehouse"
+  Validation: "Automated technical and logical validation"
+  Error: "Error report back to centre"
+  Stored: "Valid record stored (pseudonymised ID)"
+  Explanation: "Pseudonymisation replaces identifiers\nwith secure encrypted code"
+  Access: "Authorised users access pseudonymised data"
+  Regional: "Regional and municipal-level analyses"
+  TDI: "R script generates TDI tables for EMCDDA"
+}
+
+// =============================
+//   ROLE-BASED ACCESS CONTROL
+// =============================
+RBAC: {
+  direction: down
+  label: "Role-Based Access Control"
+
+  L1: "Level 1: Treatment centre user"
+  L2: "Level 2: Regional analyst"
+  L3: "Level 3: National registry analyst"
+  L4: "Level 4: Technical administrator"
+  Research: "Researchers (pseudonymised datasets only)"
+}
+
+// =============================
+//         OUTPUTS
+// =============================
+Use: {
+  direction: down
+  label: "Outputs"
+
+  FinalUse: "National reporting\nEU/EMCDDA comparisons\nEpidemiological research"
+}
+
+// =============================
+//             FLOWS
+// =============================
+TC.Client -> TC.Professional
+TC.Professional -> TC.Method
+TC.Method -> TC.HIS
+TC.Method -> TC.Manual
+TC.HIS -> TC.LocalFile
+TC.Manual -> TC.LocalFile
+TC.LocalFile -> NR.Transfer
+
+NR.Transfer -> NR.Validation
+NR.Validation -> NR.Error
+NR.Error -> TC.Method
+NR.Validation -> TC.Stored
+NR.Validation -> TC.FeedbackCentre
+TC.FeedbackCentre -> TC.Method
+
+NR.Stored -> NR.Explanation
+NR.Stored -> NR.Access
+NR.Access -> NR.Regional
+NR.Access -> NR.TDI
+
+NR.Regional -> Use.FinalUse
+NR.TDI -> Use.FinalUse
+
+NR.Stored -> RBAC
+RBAC.L1
+RBAC.L2
+RBAC.L3
+RBAC.L4
+RBAC.Research
