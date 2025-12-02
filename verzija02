@@ -1,0 +1,33 @@
+Client: "Client's first contact in calendar year"
+Professional: "Professional collects standardised data"
+Entry: "Data entry method"
+HIS: "Automatic HIS export"
+Manual: "Manual online TDI form"
+Transfer: "Secure transfer to National Data Warehouse"
+Validation: "Automated logical + technical validation"
+Error: "Errors returned to centre for correction"
+
+Stored: "Record stored in registry"
+TDI: "R script generates TDI & TDI light\nand analytical outputs"
+Feedback: "Feedback report to treatment centre\n(aggregated indicators, trends, benchmarks)"
+Use: "Aggregated data used for national/EU reporting"
+
+Client -> Professional
+Professional -> Entry
+Entry -> HIS: "Option 1"
+Entry -> Manual: "Option 2"
+
+HIS -> Transfer
+Manual -> Transfer
+
+Transfer -> Validation
+
+Validation -> Error: "If errors"
+Error -> Entry
+
+Validation -> Stored: "If valid"
+
+Stored -> TDI
+TDI -> Use
+TDI -> Feedback
+Feedback -> Entry
